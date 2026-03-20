@@ -5,9 +5,111 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+:root {
+  --font-size: 16px;
+  --background: #fafaf8;
+  --foreground: #2d3319;
+  --card: #ffffff;
+  --card-foreground: #2d3319;
+  --popover: #ffffff;
+  --popover-foreground: #2d3319;
+  --primary: #4a7c59;
+  --primary-foreground: #ffffff;
+  --secondary: #e8f3e8;
+  --secondary-foreground: #2d3319;
+  --muted: #c8d7b6;
+  --muted-foreground: #6b7456;
+  --accent: #8fae7d;
+  --accent-foreground: #ffffff;
+  --destructive: #c44536;
+  --destructive-foreground: #ffffff;
+  --border: rgba(74, 124, 89, 0.2);
+  --input: transparent;
+  --input-background: #f9f9f6;
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #4a7c59;
+  --chart-1: #4a7c59;
+  --chart-2: #8fae7d;
+  --chart-3: #a0866f;
+  --chart-4: #d4a574;
+  --chart-5: #6b8e3f;
+  --radius: 0.625rem;
+  --sidebar: #f4f1e8;
+  --sidebar-foreground: #2d3319;
+  --sidebar-primary: #4a7c59;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e8f3e8;
+  --sidebar-accent-foreground: #2d3319;
+  --sidebar-border: rgba(74, 124, 89, 0.2);
+  --sidebar-ring: #4a7c59;
+}
+
 @theme {
   --background-light: oklch(0.9845 0.0026 106.45);
-  --color-primary-green: oklch(0.5406 0.0773 152.71)
+  --color-primary-green: oklch(0.5406 0.0773 152.71);
+  --color-background: #fafaf8;
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-ring: var(--ring);
+
+}
+
+@layer base {
+
+
+  /**
+  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
+  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
+  */
+
+  html {
+    font-size: var(--font-size);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h4 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  button {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
 }
 
 
