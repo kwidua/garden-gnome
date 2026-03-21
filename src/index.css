@@ -30,7 +30,7 @@
   --switch-background: #cbced4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #4a7c59;
+  --ring: #609871;
   --chart-1: #4a7c59;
   --chart-2: #8fae7d;
   --chart-3: #a0866f;
@@ -50,7 +50,7 @@
 @theme {
   --background-light: oklch(0.9845 0.0026 106.45);
   --color-primary-green: oklch(0.5406 0.0773 152.71);
-  --color-background: #fafaf8;
+  --color-background: var(--background);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-ring: var(--ring);
