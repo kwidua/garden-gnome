@@ -1,4 +1,4 @@
-import { Sprout } from "lucide-react";
+import { LogOut, Sprout } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -19,6 +19,7 @@ export default function Header() {
                     <Link to="/my-plants" className={navigationButtons}>My Plants</Link>
                     <Link to="/calendar" className={navigationButtons}>Calendar</Link>
                     <Link to="/todos" className={navigationButtons}>Todos</Link>
+                    <Link to="/login" className={navigationButtons}><LogOut /></Link>
                     </div>
                 </div>
             </nav>
