@@ -1,9 +1,10 @@
 import { Apple, Scissors } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
+import type { PlantData } from "../models/PlantData";
 
 type PlantProps = {
-    plant: Plant
+    plant: PlantData
 }
 
 export type Plant = {
@@ -20,27 +21,27 @@ export type Plant = {
 
 export default function PlantCard({plant}: PlantProps) {
     return (
-        <Card key={plant.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+        <Card key={plant.id} className="overflow-hidden hover:shadow-lg transition-shadow border-0">
             <div className="aspect-video overflow-hidden">
               <img
-                src={plant.image}
-                alt={plant.commonName}
+                src={plant.img_url}
+                alt={plant.name}
                 className="h-full w-full object-cover"
               />
             </div>
             <CardContent className="p-4 space-y-3">
               <div>
-                <h3 className="font-medium">{plant.commonName}</h3>
-                <p className="text-sm text-muted-foreground italic">{plant.scientificName}</p>
+                <h3 className="font-medium">{plant.name}</h3>
+                <p className="text-sm text-muted-foreground italic">{plant.scientific_name}</p>
               </div>
 
-              <div className="flex flex-wrap gap-3 pt-2 border-t">
-                <div className="flex items-center gap-1" title={`Wasser: ${plant.waterNeeds}`}>
-                  {/* {getWaterIcon(plant.waterNeeds)} */}
+              <div className="flex flex-wrap gap-3 pt-2 border-muted-foreground">
+                {/* <div className="flex items-center gap-1" title={`Wasser: ${plant.waterNeeds}`}>
+                   {getWaterIcon(plant.waterNeeds)}
                 </div>
 
                 <div className="flex items-center gap-1" title={`Sonne: ${plant.sunNeeds}`}>
-                  {/* {getSunIcon(plant.sunNeeds)} */}
+                   {getSunIcon(plant.sunNeeds)} 
                 </div>
 
                 {plant.hasFruit && (
@@ -50,21 +51,21 @@ export default function PlantCard({plant}: PlantProps) {
                 )}
 
                 <div className="flex items-center gap-1" title={plant.type}>
-                  {/* {getTypeIcon(plant.type)} */}
-                </div>
+                  {getTypeIcon(plant.type)} 
+                </div> */}
 
-                {plant.pruningMonths.length > 0 && (
-                  <div className="flex items-center gap-1" title={`Schneiden: ${plant.pruningMonths.join(", ")}`}>
+                {plant.pruning_month?.length > 0 && (
+                  <div className="flex items-center gap-1" title={`Schneiden: ${plant.pruning_month?.join(", ")}`}>
                     <Scissors className="h-5 w-5 text-primary" />
                   </div>
                 )}
               </div>
 
-              {plant.pruningMonths.length > 0 && (
+              {plant.pruning_month?.length > 0 && (
                 <div className="pt-2">
-                  <p className="text-xs text-muted-foreground mb-1">Schnittzeit:</p>
+                  <p className="text-xs text-muted-foreground mb-1">Pruning Time:</p>
                   <div className="flex flex-wrap gap-1">
-                    {plant.pruningMonths.map((month) => (
+                    {plant.pruning_month?.map((month) => (
                       <Badge key={month} variant="secondary" className="text-xs">
                         {month}
                       </Badge>

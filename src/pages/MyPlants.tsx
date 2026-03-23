@@ -2,9 +2,11 @@ import { Search } from "lucide-react";
 import PlantCard, { type Plant } from "../components/PlantCard";
 import Header from "../components/Header";
 import { Input } from "../components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchDialog from "../components/SearchDialog";
 import { useAuth } from "../context/AuthContext";
+import { subscribeToPlants } from "../firebase/plant.repo";
+import { PlantData } from "../models/PlantData";
 
 const mockPlants: Plant[] = [
   {
@@ -46,13 +48,21 @@ export default function MyPlants() {
     const { user } = useAuth();
 
     const [searchQuery, setSearchQuery] = useState("");
-    const [plants, setPlants] = useState<Plant[]>(mockPlants);
+    const [plants, setPlants] = useState<Array<PlantData>>([]);
 
+
+      useEffect(() => {
+    if (!user) return;
+
+    const unsubscribe = subscribeToPlants(user.uid, setPlants);
+
+    return () => unsubscribe(); // 🔥 wichtig!
+  }, [user]);
 
     const filteredPlants = plants.filter(
         (plant) =>
-          plant.commonName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          plant.scientificName.toLowerCase().includes(searchQuery.toLowerCase())
+          plant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          plant.scientific_name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
@@ -77,12 +87,12 @@ export default function MyPlants() {
         </div>
 
         <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredPlants.map((plant) => {
+            {plants.map((plant) => {
             return(<PlantCard plant={plant} />)
             })}
         </div>
 
-        {filteredPlants.length === 0 && (
+        {plants.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">No Plant found.</p>
           </div>

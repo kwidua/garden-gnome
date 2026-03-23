@@ -24,5 +24,5 @@ export async function fetchPlantDetails(id: number) {
     }
 
     const data = await response.json()
-    return data.data || []
+    return data || []
 }
