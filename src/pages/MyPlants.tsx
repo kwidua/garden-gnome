@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import { Input } from "../components/ui/input";
 import { useState } from "react";
 import SearchDialog from "../components/SearchDialog";
+import { useAuth } from "../context/AuthContext";
 
 const mockPlants: Plant[] = [
   {
@@ -42,6 +43,8 @@ const mockPlants: Plant[] = [
 ]
 
 export default function MyPlants() {
+    const { user } = useAuth();
+
     const [searchQuery, setSearchQuery] = useState("");
     const [plants, setPlants] = useState<Plant[]>(mockPlants);
 

@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
     const [email, setEmail] = useState("");
@@ -6,7 +9,9 @@ export function Login() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const navigate = useNavigate();
+
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
 
@@ -15,8 +20,26 @@ export function Login() {
         return;
         }
 
-        setLoading(true);   
-    }
+        setLoading(true);  
+        navigate("/my-plants");
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        setEmail("");
+        setPassword("");
+        } catch (err: any) {
+          if (err.code === "auth/invalid-credential") {
+            setError("Invalid email or password");
+          } else if (err.code === "auth/user-not-found") {
+            setError("User not found");
+          } else if (err.code === "auth/wrong-password") {
+            setError("Wrong password");
+          } else {
+            setError(err.message || "Failed to login");
+          }
+      } finally {
+        setLoading(false);
+      }
+    };
 
     return (
         <div className="bg-light rounded-lg shadow-2xl p-10 w-full max-w-md items-center">
