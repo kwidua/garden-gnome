@@ -1,8 +1,30 @@
 import { LogOut, Sprout } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/config";
 
 export default function Header() {
     const navigationButtons = "px-4 py-2 rounded-md transition-colors bg-primary-green text-white"
+    const navigate = useNavigate();
+
+    const [deleteError, setDeleteError] = useState("");
+    const [signingOut, setSigningOut] = useState(false);
+
+    const handleSignOut = async () => {
+    setSigningOut(true);
+    setDeleteError("");
+
+    try {
+      await signOut(auth);
+      navigate("/login");
+
+    } catch (error: any) {
+      setDeleteError(error.message || "Failed to sign out");
+      console.error("Error signing out:", error);
+      setSigningOut(false);
+    } 
+     };
 
     return (
         <header className="sticky top-0 z-50 w-full">
@@ -19,7 +41,14 @@ export default function Header() {
                     <Link to="/my-plants" className={navigationButtons}>My Plants</Link>
                     <Link to="/calendar" className={navigationButtons}>Calendar</Link>
                     <Link to="/todos" className={navigationButtons}>Todos</Link>
-                    <Link to="/login" className={navigationButtons}><LogOut /></Link>
+                    <button
+                        type="button"
+                        disabled={signingOut}
+                        className={navigationButtons}
+                        onClick={handleSignOut}
+                    >
+                        {signingOut ? "Signing Out..." : "Sign Out"}
+                    </button>
                     </div>
                 </div>
             </nav>

@@ -1,0 +1,25 @@
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase/config";
+import type { PlantData } from "../models/PlantData";
+
+export async function addPlant(userId: string, plant: PlantData) {
+  const plantsRef = collection(db, "users", userId, "plants");
+
+  await addDoc(plantsRef, {
+    ...plant,
+    createdAt: new Date(),
+  });
+}
+
+export function subscribeToPlants(userId: string, callback: (plants: any[]) => void) {
+  const plantsRef = collection(db, "users", userId, "plants");
+
+  return onSnapshot(plantsRef, (snapshot) => {
+    const plants = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    callback(plants);
+  });
+}
