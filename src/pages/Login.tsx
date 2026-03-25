@@ -42,6 +42,7 @@ export function Login() {
     };
 
     return (
+      <div className="flex items-center justify-center min-h-screen">
         <div className="bg-light rounded-lg shadow-2xl p-10 w-full max-w-md items-center">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
         Login
@@ -97,6 +98,7 @@ export function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+    </div>
     </div>
     )
 }

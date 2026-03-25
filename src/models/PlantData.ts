@@ -6,5 +6,8 @@ export interface PlantData {
   createdAt: number;
   pruning_month: Array<string>;
   propagation: Array<string>;
-  description: string
+  description: string;
+  water_needs: string;
+  sun_needs: string;
+  hasFruit: boolean;
 }

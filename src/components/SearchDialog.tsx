@@ -7,6 +7,8 @@ import { useState } from "react";
 import { fetchPlantDetails, searchPlants } from "../services/plantApi";
 import { addPlant } from "../firebase/plant.repo";
 import { useAuth } from "../context/AuthContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import ManualPlantForm from "./ManualPlantForm";
 
 
 export default function SearchDialog() {
@@ -36,12 +38,15 @@ export default function SearchDialog() {
       await addPlant(user!.uid, {
         id: results.id,
         name: results.common_name,
-        scientific_name: results.scientific_name,
+        scientific_name: results.scientific_name[0],
         pruning_month: results.pruning_month,
         description: results.description,
         propagation: results.propagation,
         img_url: results.default_image['original_url'],
-        createdAt: Date.now()
+        water_needs: results.watering,
+        sun_needs: results.sunlight,
+        createdAt: Date.now(),
+        hasFruit: results.fruits
       });
     } catch (error) {
       console.error(error)
@@ -61,7 +66,36 @@ export default function SearchDialog() {
           <DialogHeader>
             <DialogTitle>Add new Plant</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 py-4">
+
+          <Tabs defaultValue="api" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="api">API-Search</TabsTrigger>
+                <TabsTrigger value="manual">Add Manually</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="api" className="space-y-4 mt-4">
+                <div className="space-y-2">
+                  <Label htmlFor="plant-name">Plant Name</Label>
+                  <Input
+                    id="plant-name"
+                    placeholder="z.B. Tomate, Rose, Apfelbaum..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Plant Data is added via the Perenual API.
+                  </p>
+                </div>
+                <Button onClick={handleSearch} className="w-full">
+                  Search Plant
+                </Button>
+              </TabsContent>
+
+              <TabsContent value="manual" className="space-y-4 mt-4">
+                <ManualPlantForm />
+              </TabsContent>
+            </Tabs>
+          {/* <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="plant-name">Plant name</Label>
               <Input
@@ -77,7 +111,7 @@ export default function SearchDialog() {
             <Button variant="default" onClick={handleSearch} className="w-full">
               Pflanze suchen
             </Button>
-          </div>
+          </div> */}
         </DialogContent>
       </Dialog>
 
