@@ -46,7 +46,10 @@ export default function SearchDialog() {
         water_needs: results.watering,
         sun_needs: results.sunlight,
         createdAt: Date.now(),
-        hasFruit: results.fruits
+        hasFruit: results.fruits,
+        notes: '',
+        pruning_advice: '',
+        care_notes: ''
       });
     } catch (error) {
       console.error(error)
