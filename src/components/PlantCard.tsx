@@ -1,25 +1,16 @@
-import { Apple, Scissors } from "lucide-react";
+import { Apple, Info, Scissors } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import type { PlantData } from "../models/PlantData";
+import { Button } from "./ui/button";
+import { getSunIcon, getWaterIcon } from "./PlantIcons";
 
 type PlantProps = {
-    plant: PlantData
+    plant: PlantData,
+    onShowDetails: (plant: PlantData) => void;
 }
 
-export type Plant = {
-  id: string;
-  commonName: string;
-  scientificName: string;
-  image: string;
-  waterNeeds: "low" | "medium" | "high";
-  sunNeeds: "full" | "partial" | "shade";
-  hasFruit: boolean;
-  type: "tree" | "flower" | "shrub" | "herb";
-  pruningMonths: string[];
-};
-
-export default function PlantCard({plant}: PlantProps) {
+export default function PlantCard({plant, onShowDetails}: PlantProps) {
     return (
         <Card key={plant.id} className="overflow-hidden hover:shadow-lg transition-shadow border-0">
             <div className="aspect-video overflow-hidden">
@@ -36,12 +27,12 @@ export default function PlantCard({plant}: PlantProps) {
               </div>
 
               <div className="flex flex-wrap gap-3 pt-2 border-muted-foreground">
-                {/* <div className="flex items-center gap-1" title={`Wasser: ${plant.waterNeeds}`}>
-                   {getWaterIcon(plant.waterNeeds)}
+                <div className="flex items-center gap-1" title={`Wasser: ${plant.water_needs}`}>
+                   {getWaterIcon(plant.water_needs)}
                 </div>
 
-                <div className="flex items-center gap-1" title={`Sonne: ${plant.sunNeeds}`}>
-                   {getSunIcon(plant.sunNeeds)} 
+                <div className="flex items-center gap-1" title={`Sonne: ${plant.sun_needs}`}>
+                   {getSunIcon(plant.sun_needs)} 
                 </div>
 
                 {plant.hasFruit && (
@@ -50,7 +41,7 @@ export default function PlantCard({plant}: PlantProps) {
                   </div>
                 )}
 
-                <div className="flex items-center gap-1" title={plant.type}>
+                {/* <div className="flex items-center gap-1" title={plant.type}>
                   {getTypeIcon(plant.type)} 
                 </div> */}
 
@@ -73,7 +64,16 @@ export default function PlantCard({plant}: PlantProps) {
                   </div>
                 </div>
               )}
-            </CardContent>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full gap-2 mt-2"
+                onClick={() => onShowDetails(plant)}
+              >
+                <Info className="h-4 w-4" />
+                Show Details
+              </Button>            
+              </CardContent>
           </Card>
     )
 }

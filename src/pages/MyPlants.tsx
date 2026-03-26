@@ -6,13 +6,15 @@ import { useEffect, useState } from "react";
 import SearchDialog from "../components/SearchDialog";
 import { useAuth } from "../context/AuthContext";
 import { subscribeToPlants } from "../firebase/plant.repo";
-import { PlantData } from "../models/PlantData";
+import PlantDetails from "../components/PlantDetails";
+import type { PlantData } from "../models/PlantData";
 
 export default function MyPlants() {
     const { user } = useAuth();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [plants, setPlants] = useState<Array<PlantData>>([]);
+    const [selectedPlant, setSelectedPlant] = useState<PlantData | null>(null);
 
 
       useEffect(() => {
@@ -33,7 +35,7 @@ export default function MyPlants() {
         <>
         <Header />
 
-      <div className="space-y-6 m-10">
+      <div className="space-y-6 m-10 container mx-auto px-4 py-4 sm:py-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative flex-1 max-w-md border-muted-foreground">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -52,9 +54,15 @@ export default function MyPlants() {
 
         <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredPlants.map((plant) => {
-            return(<PlantCard plant={plant} />)
+            return(<PlantCard plant={plant} onShowDetails={setSelectedPlant}
+        />)
             })}
         </div>
+
+        <PlantDetails 
+          selectedPlant={selectedPlant}
+          onClose={() => setSelectedPlant(null)}
+        />
 
         {plants.length === 0 && (
           <div className="text-center py-12">
