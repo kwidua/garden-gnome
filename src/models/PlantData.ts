@@ -7,7 +7,10 @@ export interface PlantData {
   pruning_month: Array<string>;
   propagation: Array<string>;
   description: string;
-  water_needs: string;
-  sun_needs: string;
+  water_needs: "low" | "medium" | "high";
+  sun_needs: "full" | "partial" | "shade";
   hasFruit: boolean;
+  pruning_advice: string;
+  care_notes: string;
+  notes: string;
 }
