@@ -9,6 +9,11 @@ import type { PlantData } from "../models/PlantData";
 import { useAuth } from "../context/AuthContext";
 import { addPlant } from "../firebase/plant.repo";
 
+   export const monthOptions = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "Oktober", "November", "December"
+    ];
+    
 export default function ManualPlantForm() {
       const { user } = useAuth();
     
@@ -24,10 +29,6 @@ export default function ManualPlantForm() {
         propagation: [] as string[],
     });
 
-    const monthOptions = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "Oktober", "November", "December"
-    ];
 
     async function handleManualSubmit() {
     const newPlant: PlantData = {
