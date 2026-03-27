@@ -7,6 +7,8 @@ import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
+import { useForm, Controller } from "react-hook-form";
+
 
 export type PlantFormValues = {
   name: string;
@@ -38,58 +40,73 @@ export function PlantForm({
   mode = "create",
   showAdvancedFields = false,
 }: PlantFormProps) {
-  const [form, setForm] = useState<PlantFormValues>(initialValues);
+//   const [form, setForm] = useState<PlantFormValues>(initialValues);
 
-  const update = <K extends keyof PlantFormValues>(
-    key: K,
-    value: PlantFormValues[K]
-  ) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const togglePruningMonth = (month: string) => {
-    update(
-      "pruning_month",
-      form.pruning_month.includes(month)
-        ? form.pruning_month.filter((m) => m !== month)
-        : [...form.pruning_month, month]
-    );
-  };
+    const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    } = useForm<PlantFormValues>({
+    defaultValues: initialValues,
+    });
 
   return (
     <div className="space-y-4">
         <Label htmlFor="name">Name *</Label>
         <Input
-            value={form.name}
-            onChange={(e) => update("name", e.target.value)}
+            {...register("name", { 
+                required: "Name is required", 
+                pattern: {
+                    value: /^[\p{L}\s]+$/u,
+                    message: "Only letters allowed",
+                    }
+                })}
         />
+        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
 
         <Label htmlFor="scientific_name">Scientific Name</Label>
         <Input
-            value={form.scientific_name}
-            onChange={(e) => update("scientific_name", e.target.value)}
+        {...register("scientific_name", { 
+            required: "Scientific Name is required",
+            pattern: {
+                        value: /^[\p{L}\s]+$/u,
+                        message: "Only letters allowed",
+                        }
+                    })}
         />
+        {errors.scientific_name && <p className="text-red-500">{errors.scientific_name.message}</p>}
 
         <Label htmlFor="image_url">Image-URL</Label>
         <Input
-            value={form.img_url}
-            onChange={(e) => update("img_url", e.target.value)}
+            {...register("img_url", { required: "Please Provide an Image URL",   
+                validate: (value) => {
+                try {
+                    new URL(value);
+                    return true;
+                } catch {
+                    return "Please enter a valid URL";
+                } }}
+        )}
         />
+        {errors.img_url && <p className="text-red-500">{errors.img_url.message}</p>}
 
         <Label htmlFor="description">Description</Label>
         <Textarea
-            value={form.description}
-            onChange={(e) => update("description", e.target.value)}
+            {...register("description")}
         />
 
         <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
                 <Label htmlFor="water-needs">Water Need</Label>
+                <Controller
+                    name="water_needs"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
                 <Select
-                value={form.water_needs}
-                onValueChange={(value: PlantData["water_needs"]) => 
-                setForm({...form, water_needs: value})
-                }
+                value={field.value}
+                onValueChange={field.onChange}
                 >
                 <SelectTrigger id="water-needs">
                     <SelectValue />
@@ -100,15 +117,19 @@ export function PlantForm({
                     <SelectItem value="high">High</SelectItem>
                 </SelectContent>
                 </Select>
+                )}/>
             </div>
 
             <div className="space-y-2">
             <Label htmlFor="sun-needs">Sun Need</Label>
+            <Controller
+                name="sun_needs" 
+                control={control}
+                rules={{required: true}}
+                render={({field}) => (
                 <Select
-                value={form.sun_needs}
-                onValueChange={(value: PlantData["sun_needs"]) => 
-                    setForm({...form, sun_needs: value})
-                }
+                value={field.value}
+                onValueChange={field.onChange}
                 >
                 <SelectTrigger id="sun-needs">
                     <SelectValue />
@@ -119,61 +140,81 @@ export function PlantForm({
                     <SelectItem value="shade">Shade</SelectItem>
                 </SelectContent>
                 </Select>
+                )}
+                />
             </div>
         </div>
                 
 
         <Label htmlFor="hasFruit" className="cursor-pointer">
-                       Bears Fruit
+            Bears Fruit
         </Label>
-        <Checkbox
-            checked={form.hasFruit}
-            onCheckedChange={(v) => update("hasFruit", v as boolean)}
-        />
+        <Controller
+            name="hasFruit"
+            control={control}
+            render={({field}) => (
+            <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+            />
+        )} />
 
 
         <Label>Pruning Months</Label>
-        <div className="grid grid-cols-3 gap-2">
-            {monthOptions.map((month) => (
-            <div key={month} className="flex items-center space-x-2">
-                <Checkbox
-                id={`month-${month}`}
-                checked={form.pruning_month.includes(month)}
-                onCheckedChange={() => togglePruningMonth(month)}
-                />
-                <Label 
-                htmlFor={`month-${month}`} 
-                className="text-sm cursor-pointer"
-                >
-                {month}
-                </Label>
-            </div>
-            ))}
-        </div>
+        <Controller
+            name="pruning_month"
+            control={control}
+            render={({ field }) => {
+                const toggle = (month: string) => {
+                const value = field.value || [];
+                field.onChange(
+                    value.includes(month)
+                    ? value.filter((m: string) => m !== month)
+                    : [...value, month]
+                );
+                };
+
+            return (
+                <div className="grid grid-cols-3 gap-2">
+                    {monthOptions.map((month) => (
+                    <div key={month} className="flex items-center space-x-2">
+                        <Checkbox
+                        id={`month-${month}`}
+                            checked={field.value?.includes(month)}
+                            onCheckedChange={() => toggle(month)}
+                        />
+                        <Label 
+                        htmlFor={`month-${month}`} 
+                        className="text-sm cursor-pointer"
+                        >
+                        {month}
+                        </Label>
+                    </div>
+                    ))}
+                </div>
+            )}}
+            />
 
       {showAdvancedFields && (
         <>
             <Label>Pruning Advice</Label>
             <Textarea
-                value={form.pruning_advice || ""}
-                onChange={(e) => update("pruning_advice", e.target.value)}
+                {...register("pruning_advice")}
             />
 
             <Label>Care Notes</Label>
             <Textarea
-                value={form.care_notes || ""}
-                onChange={(e) => update("care_notes", e.target.value)}
+                {...register("care_notes")}
             />
 
             <Label>Notes</Label>
             <Textarea
-                value={form.notes || ""}
-                onChange={(e) => update("notes", e.target.value)}
+                {...register("notes")}
             />
         </>
       )}
 
-      <Button onClick={() => onSubmit(form)}>
+      <Button onClick={handleSubmit(onSubmit)}>
         {mode === "create" ? "Add Plant" : "Save"}
       </Button>
     </div>
