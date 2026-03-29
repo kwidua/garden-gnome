@@ -1,110 +1,5 @@
-// import { useState } from "react";
-// import { signInWithEmailAndPassword } from "firebase/auth";
-// import { auth } from "../firebase/config";
-// import { useNavigate } from "react-router-dom";
-
-// export function Login() {
-//     const [email, setEmail] = useState("");
-//     const [password, setPassword] = useState("");
-//     const [error, setError] = useState("");
-//     const [loading, setLoading] = useState(false);
-
-//     const navigate = useNavigate();
-
-//     const handleLogin = async (e: React.FormEvent) => {
-//         e.preventDefault();
-//         setError("");
-
-//         if (!email || !password) {
-//         setError("Please fill in all fields");
-//         return;
-//         }
-
-//         setLoading(true);  
-//         navigate("/my-plants");
-//       try {
-//         await signInWithEmailAndPassword(auth, email, password);
-//         setEmail("");
-//         setPassword("");
-//         } catch (err: any) {
-//           if (err.code === "auth/invalid-credential") {
-//             setError("Invalid email or password");
-//           } else if (err.code === "auth/user-not-found") {
-//             setError("User not found");
-//           } else if (err.code === "auth/wrong-password") {
-//             setError("Wrong password");
-//           } else {
-//             setError(err.message || "Failed to login");
-//           }
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     return (
-//       <div className="flex items-center justify-center min-h-screen">
-//         <div className="bg-light rounded-lg shadow-2xl p-10 w-full max-w-md items-center">
-//       <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
-//         Login
-//       </h2>
-//       {error && (
-//         <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 mb-5 rounded text-sm">
-//           {error}
-//         </div>
-//       )}
-
-//       <form onSubmit={handleLogin}>
-//         <div className="mb-5">
-//           <label
-//             htmlFor="email"
-//             className="block text-gray-700 font-medium mb-2"
-//           >
-//             Email:
-//           </label>
-//           <input
-//             id="email"
-//             type="email"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             placeholder="your@email.com"
-//             disabled={loading}
-//             className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 focus:outline-none focus:border-primary-green focus:ring-2 focus:ring-muted disabled:bg-gray-100 disabled:cursor-not-allowed"
-//           />
-//         </div>
-
-//         <div className="mb-6">
-//           <label
-//             htmlFor="password"
-//             className="block text-gray-700 font-medium mb-2"
-//           >
-//             Password:
-//           </label>
-//           <input
-//             id="password"
-//             type="password"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             placeholder="Enter your password"
-//             disabled={loading}
-//             className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 focus:outline-none focus:border-primary-green focus:ring-2 focus:ring-muted disabled:bg-gray-100 disabled:cursor-not-allowed"
-//           />
-//         </div>
-
-//         <button
-//           type="submit"
-//           disabled={loading}
-//           className="w-full py-3 bg-primary-green text-white font-semibold rounded-md hover:shadow-lg hover:-translate-y-0.5 transition-transform disabled:opacity-70 disabled:cursor-not-allowed"
-//         >
-//           {loading ? "Logging in..." : "Login"}
-//         </button>
-//       </form>
-//     </div>
-//     </div>
-//     )
-// }
-
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { Sprout, Leaf, Calendar, CheckSquare, Droplets, Sun } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
@@ -114,7 +9,7 @@ import { auth } from "../firebase/config";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-export function Login() {
+export function LandingPage() {
      const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
         const [error, setError] = useState("");
@@ -154,18 +49,17 @@ export function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-background">
-       <header className="sticky top-0 z-50 w-full">
-            <nav className="backdrop-blur-md shadow-sm mx-auto px-6 py-4">
-                <div className="flex items-center justify-between">
-                     <Link to="/my-plants" className="flex items-center gap-2">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-green">
-                        <Sprout className="h-6 w-6 text-white" />
-                        </div>
-                        <h1 className="text-lg sm:text-xl text-foreground">Garden Gnome</h1>
-                    </Link>
-                </div>
-            </nav>
-        </header>
+      {/* Header */}
+      <header className="border-b bg-card/50 backdrop-blur-sm">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <div className="flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
+              <Sprout className="h-6 w-6 text-primary-foreground" />
+            </div>
+            <h1 className="text-xl font-bold text-foreground">Garden Gnome</h1>
+          </div>
+        </div>
+      </header>
 
       <main className="container mx-auto px-4 py-12">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
@@ -184,7 +78,7 @@ export function Login() {
 
             {/* Features */}
             <div className="grid gap-4 sm:grid-cols-2 pt-4">
-              <Card className="border-primary/20 bg-white">
+              <Card className="border-primary/20">
                 <CardContent className="p-4 flex items-start gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
                     <Leaf className="h-5 w-5 text-primary" />
@@ -198,7 +92,7 @@ export function Login() {
                 </CardContent>
               </Card>
 
-              <Card className="border-primary/20 bg-white">
+              <Card className="border-primary/20">
                 <CardContent className="p-4 flex items-start gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
                     <Calendar className="h-5 w-5 text-primary" />
@@ -212,7 +106,7 @@ export function Login() {
                 </CardContent>
               </Card>
 
-              <Card className="border-primary/20 bg-white">
+              <Card className="border-primary/20">
                 <CardContent className="p-4 flex items-start gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
                     <CheckSquare className="h-5 w-5 text-primary" />
@@ -226,7 +120,7 @@ export function Login() {
                 </CardContent>
               </Card>
 
-              <Card className="border-primary/20 bg-white">
+              <Card className="border-primary/20">
                 <CardContent className="p-4 flex items-start gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
                     <Sun className="h-5 w-5 text-primary" />
@@ -243,7 +137,7 @@ export function Login() {
           </div>
 
           {/* Login/Register Form */}
-          <Card className="max-w-md mx-auto w-full bg-white">
+          <Card className="max-w-md mx-auto w-full">
             <CardContent className="p-6 sm:p-8">
               <div className="space-y-6">
                 <div className="text-center">
@@ -296,12 +190,14 @@ export function Login() {
                 </form>
 
                 <div className="text-center text-sm text-muted-foreground">
+                  <p>
                     <button
                       type="button"
                       className="text-primary hover:underline"
                     >
                       Anmelden
                     </button>
+                  </p>
                 </div>
 
                   <div className="pt-4 border-t">
