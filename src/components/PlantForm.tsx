@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { PlantData } from "../models/PlantData";
 import { monthOptions } from "./ManualPlantForm";
 import { Button } from "./ui/button";

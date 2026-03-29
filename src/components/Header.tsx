@@ -1,4 +1,4 @@
-import { LogOut, Sprout } from "lucide-react";
+import { Sprout } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
@@ -8,7 +8,7 @@ export default function Header() {
     const navigationButtons = "px-4 py-2 rounded-md transition-colors bg-primary-green text-white"
     const navigate = useNavigate();
 
-    const [deleteError, setDeleteError] = useState("");
+    const [deleteErr, setDeleteError] = useState("");
     const [signingOut, setSigningOut] = useState(false);
 
     const handleSignOut = async () => {
@@ -21,7 +21,7 @@ export default function Header() {
 
     } catch (error: any) {
       setDeleteError(error.message || "Failed to sign out");
-      console.error("Error signing out:", error);
+      console.error("Error signing out:", deleteErr);
       setSigningOut(false);
     } 
      };

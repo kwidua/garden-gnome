@@ -28,11 +28,6 @@ export default function PlantDetails({ selectedPlant, onClose }: PlantDetailsPro
     }
   };
 
-  const handleCancelEdit = () => {
-    setIsEditMode(false);
-    setEditForm(null);
-  };
-
   async function handleSaveEdit(updatedPlant: PlantData) {
     if (!user) return;
   
@@ -68,7 +63,6 @@ export default function PlantDetails({ selectedPlant, onClose }: PlantDetailsPro
               <PlantEditForm
                 plant={editForm}
                 onSave={handleSaveEdit}
-                onCancel={handleCancelEdit}
               />
             ) : (
               <div className="space-y-6">
