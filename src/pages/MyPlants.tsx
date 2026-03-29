@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import PlantCard, { type Plant } from "../components/PlantCard";
+import PlantCard from "../components/PlantCard";
 import Header from "../components/Header";
 import { Input } from "../components/ui/input";
 import { useEffect, useState } from "react";

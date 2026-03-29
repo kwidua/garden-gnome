@@ -1,0 +1,38 @@
+name: Deploy Garden Gnome to Uberspace
+on:
+  push:
+    branches: [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [24.x]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy using Rsync
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avrh --delete --exclude=".git" --exclude=".github"
+          path: dist/
+          remote_path: /var/www/virtual/${{ vars.SSH_USERNAME }}/garden-gnome
+          remote_host: ${{ vars.SSH_HOST }}
+          remote_user: ${{ vars.SSH_USERNAME }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # remote_key_pass: ${{ secrets.SSH_PRIVATE_KEY_PASS }} # Only needed if you added a passphrase upon creating the SSH key
+
+
+          
