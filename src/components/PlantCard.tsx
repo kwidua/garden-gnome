@@ -3,7 +3,7 @@ import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import type { PlantData } from "../models/PlantData";
 import { Button } from "./ui/button";
-import { getSunIcon, getWaterIcon } from "./PlantIcons";
+import { getPruningIcon, getSunIcon, getWaterIcon } from "./PlantIcons";
 
 type PlantProps = {
     plant: PlantData,
@@ -47,7 +47,7 @@ export default function PlantCard({plant, onShowDetails}: PlantProps) {
 
                 {plant.pruning_month?.length > 0 && (
                   <div className="flex items-center gap-1" title={`Schneiden: ${plant.pruning_month?.join(", ")}`}>
-                    <Scissors className="h-5 w-5 text-primary" />
+                    {getPruningIcon(plant.pruning_month)}
                   </div>
                 )}
               </div>
