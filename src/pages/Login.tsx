@@ -155,8 +155,8 @@ export function Login() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-background">
        <header className="sticky top-0 z-50 w-full">
-            <nav className="backdrop-blur-md shadow-sm mx-auto px-6 py-4">
-                <div className="flex items-center justify-between">
+            <nav className="backdrop-blur-md shadow-sm mx-auto px-6 py-4 bg-white">
+                <div className="container mx-auto flex items-center justify-between">
                      <Link to="/my-plants" className="flex items-center gap-2">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-green">
                         <Sprout className="h-6 w-6 text-white" />
@@ -169,7 +169,7 @@ export function Login() {
 
       <main className="container mx-auto px-4 py-12">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-          {/* Hero Section */}
+
           <div className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-4xl sm:text-5xl font-bold text-foreground">
@@ -182,11 +182,10 @@ export function Login() {
               </p>
             </div>
 
-            {/* Features */}
             <div className="grid gap-4 sm:grid-cols-2 pt-4">
               <Card className="border-primary/20 bg-white">
                 <CardContent className="p-4 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
+                  <div className="p-2 rounded-lg bg-accent/30">
                     <Leaf className="h-5 w-5 text-primary" />
                   </div>
                   <div>
@@ -200,7 +199,7 @@ export function Login() {
 
               <Card className="border-primary/20 bg-white">
                 <CardContent className="p-4 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
+                  <div className="p-2 rounded-lg bg-accent/30">
                     <Calendar className="h-5 w-5 text-primary" />
                   </div>
                   <div>
@@ -214,7 +213,7 @@ export function Login() {
 
               <Card className="border-primary/20 bg-white">
                 <CardContent className="p-4 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
+                  <div className="p-2 rounded-lg bg-accent/30">
                     <CheckSquare className="h-5 w-5 text-primary" />
                   </div>
                   <div>
@@ -228,7 +227,7 @@ export function Login() {
 
               <Card className="border-primary/20 bg-white">
                 <CardContent className="p-4 flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
+                  <div className="p-2 rounded-lg bg-accent/30">
                     <Sun className="h-5 w-5 text-primary" />
                   </div>
                   <div>
@@ -242,13 +241,12 @@ export function Login() {
             </div>
           </div>
 
-          {/* Login/Register Form */}
           <Card className="max-w-md mx-auto w-full bg-white">
             <CardContent className="p-6 sm:p-8">
               <div className="space-y-6">
                 <div className="text-center">
                   <h3 className="text-2xl font-bold mb-2">
-                    Willkommen zurück
+                    Welcome back
                   </h3>
                   <p className="text-sm text-muted-foreground">
                     Melden Sie sich an, um fortzufahren
@@ -262,6 +260,7 @@ export function Login() {
                       id="email"
                       type="email"
                       placeholder="ihr@email.de"
+                      className="border-muted-outline"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -274,6 +273,7 @@ export function Login() {
                       id="password"
                       type="password"
                       placeholder="••••••••"
+                      className="border-muted-outline"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -284,29 +284,17 @@ export function Login() {
                     <p className="text-sm text-destructive">{error}</p>
                   )}
 
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={loading}
-                  >
-                    {loading
-                      ? "Wird verarbeitet..."
-                      : ''}
-                  </Button>
-                </form>
-
-                <div className="text-center text-sm text-muted-foreground">
-                    <button
-                      type="button"
-                      className="text-primary hover:underline"
+                    <Button
+                      type="submit"
+                      className="text-center text-sm text-white w-full"
                     >
                       Anmelden
-                    </button>
-                </div>
+                    </Button>
+                </form>
 
-                  <div className="pt-4 border-t">
+                  <div className="pt-4 border-t border-muted-outline">
                     <p className="text-xs text-muted-foreground text-center">
-                      Demo: Sie können sich mit beliebigen Anmeldedaten anmelden
+                      Demo Email: kwidua+garden-gnome.com, Demo Passwort: gardenGnomeDemo
                     </p>
                   </div>
               </div>
@@ -316,7 +304,7 @@ export function Login() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t mt-12 py-8">
+      <footer className="border-t border-muted-outline mt-142 py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p>© 2026 Garden Gnome. Ihr persönlicher Gartenassistent.</p>
         </div>
