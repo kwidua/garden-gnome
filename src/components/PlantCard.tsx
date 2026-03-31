@@ -1,4 +1,4 @@
-import { Apple, Info, Scissors } from "lucide-react";
+import { Apple, Info } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import type { PlantData } from "../models/PlantData";

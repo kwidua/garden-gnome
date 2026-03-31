@@ -1,6 +1,6 @@
 import { LogOut, Sprout, Menu } from "lucide-react";
 import { useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
@@ -11,13 +11,11 @@ export default function Header() {
     const navigate = useNavigate();
 
     const [deleteErr, setDeleteError] = useState("");
-    const [signingOut, setSigningOut] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
       const { user } = useAuth();
 
     const handleSignOut = async () => {
-        setSigningOut(true);
         setDeleteError("");
 
         try {
@@ -27,7 +25,6 @@ export default function Header() {
         } catch (error: any) {
         setDeleteError(error.message || "Failed to sign out");
         console.error("Error signing out:", deleteErr);
-        setSigningOut(false);
         } 
     };
 
