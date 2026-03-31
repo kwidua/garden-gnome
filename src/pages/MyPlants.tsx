@@ -37,12 +37,12 @@ export default function MyPlants() {
 
       <div className="space-y-6 m-10 container mx-auto px-4 py-4 sm:py-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative flex-1 max-w-md border-muted-foreground">
+          <div className="relative flex-1 max-w-md border-muted-outline">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Search plants..."
-              className="pl-9"
+              className="pl-9 border-muted-outline"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

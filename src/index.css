@@ -20,7 +20,8 @@
   --secondary-foreground: #2d3319;
   --muted: #c8d7b6;
   --muted-foreground: #6b7456;
-  --accent: #8fae7d;
+  --muted-outline: #dfe2de;
+  --accent: #8fc072;
   --accent-foreground: #ffffff;
   --destructive: #c44536;
   --destructive-foreground: #ffffff;
@@ -45,6 +46,7 @@
   --sidebar-accent-foreground: #2d3319;
   --sidebar-border: rgba(74, 124, 89, 0.2);
   --sidebar-ring: #4a7c59;
+  --raindrop: #27a8cf;
 }
 
 @theme {
@@ -56,7 +58,10 @@
   --color-ring: var(--ring);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-foreground: var(--foreground)
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-raindrop: var(--raindrop);
+  --color-muted-outline: var(--muted-outline);
 
 }
 
