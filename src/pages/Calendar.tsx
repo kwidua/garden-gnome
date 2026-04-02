@@ -8,6 +8,9 @@ import { useState } from "react";
 export default function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date()); 
 
+    const thisMonth = (new Date()).getMonth();
+    const thisYear = (new Date()).getFullYear();
+
     const previousMonth = () => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
     };
@@ -34,7 +37,7 @@ export default function Calendar() {
         <>
         <Header />
          
-        <div className="space-y-4 sm:space-y-6 md:ml-100 md:mr-100 mt-20 mb-20">
+        <div className="space-y-4 sm:space-y-6 md:ml-10 md:mr-10 lg:ml-110 lg:mr-110 mt-20 mb-20">
         <div className="flex items-center justify-between">
             <h2 className="text-xl sm:text-2xl">
             {monthOptions[currentDate.getMonth()]} {currentDate.getFullYear()}
@@ -68,8 +71,7 @@ export default function Calendar() {
                 {Array.from({ length: daysInMonth }).map((_, index) => {
                 const day = index + 1;
                 const events = ""
-                const isToday = day === currentDate.getDate()
-                console.log(day,isToday)
+                const isToday = (day === currentDate.getDate()) && (thisMonth === currentDate.getMonth()) && (thisYear === currentDate.getFullYear())
 
                 return (
                     <button
@@ -106,7 +108,7 @@ export default function Calendar() {
             </CardContent>
             </Card>
 
-            <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-4">
+            <div className="grid gap-3 sm:gap-4 grid-cols-2 md:grid-cols-4">
                 <Card className="bg-blue-50 border-blue-200">
                 <CardContent className="p-3 sm:p-4 flex items-center gap-2 sm:gap-3">
                     <Snowflake className="h-5 w-5 sm:h-6 sm:w-6 text-blue-500 flex-shrink-0" />
