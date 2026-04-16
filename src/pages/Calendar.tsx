@@ -3,7 +3,10 @@ import Header from "../components/Header";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { monthOptions } from "../components/ManualPlantForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { syncWeatherForNextDays } from "../services/weatherService";
+import { useAuth } from "../context/AuthContext";
+import { useCalendarWeather } from "../hooks/useCalendarWeather";
 
 export default function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date()); 
@@ -11,6 +14,8 @@ export default function Calendar() {
     const thisMonth = (new Date()).getMonth();
     const thisYear = (new Date()).getFullYear();
 
+    const { user } = useAuth();
+    
     const previousMonth = () => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
     };
@@ -32,6 +37,18 @@ export default function Calendar() {
 
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
+
+    useEffect(() => {
+    if (user) {
+        syncWeatherForNextDays(user.uid);
+    }
+    }, [user]);
+
+    const { data: weatherData, loading } = useCalendarWeather(currentDate);
+    
+    if (loading) {
+        return <div>Loading calendar...</div>;
+    }
 
     return (
         <>
@@ -72,6 +89,7 @@ export default function Calendar() {
                 const day = index + 1;
                 const events = ""
                 const isToday = (day === currentDate.getDate()) && (thisMonth === currentDate.getMonth()) && (thisYear === currentDate.getFullYear())
+                const dayWeather = weatherData[day];
 
                 return (
                     <button
@@ -90,15 +108,23 @@ export default function Calendar() {
                         {day}
                         </div>
                         <div className="flex-1 flex flex-wrap gap-0.5 sm:gap-1 mt-0.5 sm:mt-1 content-start justify-center">
-                        {/* {events.map((event, idx) => (
-                            <div
-                            key={idx}
-                            className="hover:scale-110 transition-transform"
-                            title={event.title}
-                            >
-                            {getEventIcon(event.type)}
-                            </div>
-                        ))} */}
+                        <div className="flex flex-wrap gap-0.5 sm:gap-1 mt-0.5 sm:mt-1 content-start justify-center">
+                            {dayWeather?.icons.includes("frost") && (
+                                <Snowflake className="h-5 w-5 text-blue-500" />
+                            )}
+
+                            {dayWeather?.icons.includes("sun") && (
+                                <Sun className="h-5 w-5 text-amber-500" />
+                            )}
+
+                            {dayWeather?.icons.includes("water") && (
+                                <Droplets className="h-5 w-5 text-blue-600" />
+                            )}
+
+                            {dayWeather?.icons.includes("plant") && (
+                                <Scissors className="h-5 w-5 text-green-600" />
+                            )}
+                        </div>
                         </div>
                     </div>
                     </button>

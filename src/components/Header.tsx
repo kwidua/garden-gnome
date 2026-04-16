@@ -59,7 +59,7 @@ export default function Header() {
         >
             Calendar
         </Link>
-        <Link
+        {/* <Link
             to="/todos"
             onClick={onClick}
             className={`px-4 py-2 rounded-md transition-colors ${
@@ -69,7 +69,7 @@ export default function Header() {
             }`}
         >
             Todos
-        </Link>
+        </Link> */}
         </>
     );
 
