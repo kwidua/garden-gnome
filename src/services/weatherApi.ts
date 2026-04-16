@@ -27,7 +27,7 @@ export async function aggregateWeatherDataForDay(day: string): Promise<WeatherDa
     var windSpeed: number[] = []
     var humidity: number[] =[]
 
-    weather.map((hour) => {
+    weather.map((hour: any) => {
         temperatures.push(hour.temperature)
         rain.push(hour.precipitation)
         if (hour.sunshine != null) {

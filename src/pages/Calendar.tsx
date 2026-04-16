@@ -4,7 +4,6 @@ import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { monthOptions } from "../components/ManualPlantForm";
 import { useEffect, useState } from "react";
-import { aggregateWeatherDataForDay } from "../services/weatherApi";
 import { syncWeatherForNextDays } from "../services/weatherService";
 import { useAuth } from "../context/AuthContext";
 import { useCalendarWeather } from "../hooks/useCalendarWeather";
@@ -39,13 +38,6 @@ export default function Calendar() {
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
 
-    const dayString = (new Date()).toISOString().split('T')[0]
-    // aggregateWeatherDataForDay(dayString)
-
-    // if (user) {
-    //     syncWeatherForNextDays(user.uid)
-    // }
-
     useEffect(() => {
     if (user) {
         syncWeatherForNextDays(user.uid);
@@ -53,9 +45,11 @@ export default function Calendar() {
     }, [user]);
 
     const { data: weatherData, loading } = useCalendarWeather(currentDate);
-
-    console.log(weatherData)
     
+    if (loading) {
+        return <div>Loading calendar...</div>;
+    }
+
     return (
         <>
         <Header />
