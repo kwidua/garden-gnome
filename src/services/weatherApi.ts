@@ -49,8 +49,8 @@ export async function aggregateWeatherDataForDay(day: string): Promise<WeatherDa
         highest_temp: Math.max(...temperatures),
         avg_temp: temperatures.reduce((a, b) => a + b) / temperatures.length,
         rain_quantity: rain.reduce((a,b) => a + b),
-        will_rain: Math.max(...rain) > 0.2,
-        is_sunny: ((sunshine.reduce((a,b) => a + b)) / 60) > 5,
+        will_rain: Math.max(...rain) > 0.2,  //more than two liters/qm rain
+        is_sunny: ((sunshine.reduce((a,b) => a + b)) / 60) > 5, //more than 5 sun hours
         sunshine_duration: sunshine.reduce((a,b) => a + b),
         wind_speed_max: Math.max(...windSpeed),
         humidity_avg: humidity.reduce((a, b) => a + b) / humidity.length,

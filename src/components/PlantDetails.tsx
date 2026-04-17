@@ -1,4 +1,4 @@
-import { Apple, Edit, Info, Leaf, Scissors, Sun } from "lucide-react";
+import { Apple, Edit, Info, Leaf, Scissors, Sun, Trash } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
@@ -7,7 +7,7 @@ import type { PlantData } from "../models/PlantData";
 import { Badge } from "./ui/badge";
 import { getSunIcon, getWaterIcon } from "./PlantIcons";
 import { PlantEditForm } from "./PlantEditForm";
-import { updatePlant } from "../firebase/plant.repo";
+import { deletePlant, updatePlant } from "../firebase/plant.repo";
 import { useAuth } from "../context/AuthContext";
 
 type PlantDetailsProps = {
@@ -19,14 +19,24 @@ export default function PlantDetails({ selectedPlant, onClose }: PlantDetailsPro
   const [isEditMode, setIsEditMode] = useState(false);
   const [editForm, setEditForm] = useState<PlantData | null>(null);
 
+  const displayPlant = editForm ?? selectedPlant;
+
   const { user } = useAuth();
   
   const handleEditClick = () => {
-    if (selectedPlant) {
-      setEditForm({ ...selectedPlant });
+    if (displayPlant) {
+      setEditForm({ ...displayPlant });
       setIsEditMode(true);
     }
   };
+
+  async function handleDelete(plantId: string) {
+    if (!user) return;
+    
+    await deletePlant(user.uid, plantId);
+    onClose();
+  }
+
 
   async function handleSaveEdit(updatedPlant: PlantData) {
     if (!user) return;
@@ -37,25 +47,25 @@ export default function PlantDetails({ selectedPlant, onClose }: PlantDetailsPro
       await updatePlant(user.uid, id!, updates);
 
       setIsEditMode(false);
-      setEditForm(null);
+      setEditForm(updatedPlant);
     } catch (err) {
       console.error("Failed to update plant:", err);
     }
   };
 
   return (
-    <Dialog open={selectedPlant !== null} onOpenChange={() => {
+    <Dialog open={displayPlant !== null} onOpenChange={() => {
       onClose();
       setIsEditMode(false);
       setEditForm(null);
     }}>
       <DialogContent className="max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
-        {selectedPlant && (
+        {displayPlant && (
           <>
             <DialogHeader>
-              <DialogTitle className="text-2xl">{isEditMode ? 'Pflanze bearbeiten' : selectedPlant.name}</DialogTitle>
+              <DialogTitle className="text-2xl">{isEditMode ? 'Pflanze bearbeiten' : displayPlant.name}</DialogTitle>
               {!isEditMode && (
-                <p className="text-sm text-muted-foreground italic">{selectedPlant.scientific_name}</p>
+                <p className="text-sm text-muted-foreground italic">{displayPlant.scientific_name}</p>
               )}
             </DialogHeader>
 
@@ -68,8 +78,8 @@ export default function PlantDetails({ selectedPlant, onClose }: PlantDetailsPro
               <div className="space-y-6">
                 <div className="aspect-video overflow-hidden rounded-lg">
                   <img
-                    src={selectedPlant.img_url}
-                    alt={selectedPlant.name}
+                    src={displayPlant.img_url}
+                    alt={displayPlant.name}
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -78,16 +88,16 @@ export default function PlantDetails({ selectedPlant, onClose }: PlantDetailsPro
                   <Card>
                     <CardContent className="p-3 flex flex-col items-center gap-2">
                       <div className="text-sm text-muted-foreground">Wasser</div>
-                      {getWaterIcon(selectedPlant.water_needs)}
-                      <div className="text-xs capitalize">{selectedPlant.water_needs}</div>
+                      {getWaterIcon(displayPlant.water_needs)}
+                      <div className="text-xs capitalize">{displayPlant.water_needs}</div>
                     </CardContent>
                   </Card>
 
                   <Card>
                     <CardContent className="p-3 flex flex-col items-center gap-2">
                       <div className="text-sm text-muted-foreground">Sonne</div>
-                      {getSunIcon(selectedPlant.sun_needs)}
-                      <div className="text-xs capitalize">{selectedPlant.sun_needs}</div>
+                      {getSunIcon(displayPlant.sun_needs)}
+                      <div className="text-xs capitalize">{displayPlant.sun_needs}</div>
                     </CardContent>
                   </Card>
 
@@ -102,37 +112,37 @@ export default function PlantDetails({ selectedPlant, onClose }: PlantDetailsPro
                   <Card>
                     <CardContent className="p-3 flex flex-col items-center gap-2">
                       <div className="text-sm text-muted-foreground">Früchte</div>
-                      <Apple className={`h-5 w-5 ${selectedPlant.hasFruit ? 'text-red-500' : 'text-muted-foreground'}`} />
-                      <div className="text-xs">{selectedPlant.hasFruit ? 'Ja' : 'Nein'}</div>
+                      <Apple className={`h-5 w-5 ${displayPlant.hasFruit ? 'text-red-500' : 'text-muted-foreground'}`} />
+                      <div className="text-xs">{displayPlant.hasFruit ? 'Ja' : 'Nein'}</div>
                     </CardContent>
                   </Card>
                 </div>
 
-                {selectedPlant.description && (
+                {displayPlant.description && (
                   <div className="space-y-2">
                     <h3 className="font-medium flex items-center gap-2">
                       <Leaf className="h-4 w-4 text-primary" />
                       Description
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      {selectedPlant.description}
+                      {displayPlant.description}
                     </p>
                   </div>
                 )}
 
-                {selectedPlant.pruning_advice && (
+                {displayPlant.pruning_advice && (
                   <div className="space-y-2">
                     <h3 className="font-medium flex items-center gap-2">
                       <Scissors className="h-4 w-4 text-primary" />
                       Pruning Advice
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      {selectedPlant.pruning_advice}
+                      {displayPlant.pruning_advice}
                     </p>
-                    {selectedPlant.pruning_month.length > 0 && (
+                    {displayPlant.pruning_month.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-2">
                         <span className="text-xs text-muted-foreground">Best Months:</span>
-                        {selectedPlant.pruning_month.map((month) => (
+                        {displayPlant.pruning_month.map((month) => (
                           <Badge key={month} variant="secondary" className="text-xs">
                             {month}
                           </Badge>
@@ -142,39 +152,51 @@ export default function PlantDetails({ selectedPlant, onClose }: PlantDetailsPro
                   </div>
                 )}
 
-                {selectedPlant.care_notes && (
+                {displayPlant.care_notes && (
                   <div className="space-y-2">
                     <h3 className="font-medium flex items-center gap-2">
                       <Sun className="h-4 w-4 text-primary" />
                       Care Advice
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      {selectedPlant.care_notes}
+                      {displayPlant.care_notes}
                     </p>
                   </div>
                 )}
 
-                {selectedPlant.notes && (
+                {displayPlant.notes && (
                   <div className="space-y-2">
                     <h3 className="font-medium flex items-center gap-2">
                       <Info className="h-4 w-4 text-primary" />
                       Notes
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed bg-secondary/50 p-3 rounded-md">
-                      {selectedPlant.notes}
+                      {displayPlant.notes}
                     </p>
                   </div>
                 )}
+                
+                <div className="flex gap-2 mt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1 gap-2"
+                    onClick={handleEditClick}
+                  >
+                    <Edit className="h-4 w-4" />
+                    Edit
+                  </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full gap-2 mt-2"
-                  onClick={handleEditClick}
-                >
-                  <Edit className="h-4 w-4" />
-                  Edit
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="lex-1 gap-2 hover:bg-red-300"
+                    onClick={() => handleDelete(displayPlant.id)}
+                  >
+                    <Trash className="h-4 w-4" />
+                    Delete
+                  </Button>
+                </div>
               </div>
             )}
           </>
