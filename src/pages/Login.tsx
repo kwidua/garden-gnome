@@ -184,7 +184,7 @@ export function Login() {
 
                   <div className="pt-4 border-t border-muted-outline">
                     <p className="text-xs text-muted-foreground text-center">
-                      Demo Email: kwidua+garden-gnome.com, Demo Passwort: gardenGnomeDemo
+                      Demo Email: kwidua+garden-gnome@gmail.com, Demo Passwort: gardenGnomeDemo
                     </p>
                   </div>
               </div>
