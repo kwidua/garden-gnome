@@ -1,4 +1,4 @@
-import { collection, addDoc, onSnapshot, updateDoc, doc } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import type { PlantData } from "../models/PlantData";
 
@@ -32,4 +32,13 @@ export async function updatePlant(
   const plantRef = doc(db, "users", userId, "plants", plantId);
 
   await updateDoc(plantRef, updates);
+}
+
+export async function deletePlant(
+  userId: string,
+  plantId: string
+): Promise<void> {
+  const plantRef = doc(db, "users", userId, "plants", plantId);
+
+  await deleteDoc(plantRef);
 }
